@@ -14,7 +14,7 @@ class Body: Reactor.Component
 
     function render() {
         if (connections.length == 0)
-          return <div style="size:*; margin: * 0; text-align: center;">
+          return <div style="size:*; margin: * 0; text-align: center; display: none">
                 Waiting for new connection ...
                 </div>;
         var c = connections[this.cur];
@@ -26,8 +26,9 @@ class Body: Reactor.Component
             me.sendMsg(msg);
         };
         var right_style = show_chat ? "" : "display: none";
-       // below size:* is work around for Linux, it alreayd set in css, but not work, shit sciter
-        return <div .content style="size:*">
+        return;
+        below size:* is work around for Linux, it alreayd set in css, but not work, shit sciter
+        return <div .content style="size:*; display: none">
             <div .left-panel>
                 <div .icon-and-id>
                     <div .icon style={"background: " + string2RGB(c.name, 1)}>
