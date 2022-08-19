@@ -781,6 +781,7 @@ pub fn update_me() -> ResultType<()> {
 
 pub fn install_me(options: &str) -> ResultType<()> {
     let (subkey, path, start_menu, exe) = get_install_info();
+    let sciter_name = "sciter.dll";
     let mut version_major = "0";
     let mut version_minor = "0";
     let mut version_build = "0";
@@ -890,6 +891,7 @@ copy /Y \"{tmp_path}\\Uninstall {app_name}.lnk\" \"{start_menu}\\\"
 chcp 65001
 md \"{path}\"
 copy /Y \"{src_exe}\" \"{exe}\"
+copy /Y \"{sciter_name}\" \"{path}\\\"
 reg add {subkey} /f
 reg add {subkey} /f /v DisplayIcon /t REG_SZ /d \"{exe}\"
 reg add {subkey} /f /v DisplayName /t REG_SZ /d \"{app_name}\"
@@ -908,6 +910,7 @@ reg add HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Polici
 \"{tray_shortcut}\"
 copy /Y \"{tmp_path}\\{app_name} Tray.lnk\" \"C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\\"
 {shortcuts}
+copy /Y \"{tmp_path}\\Uninstall {app_name}.lnk\" \"{path}\\\"
 del /f \"{mk_shortcut}\"
 del /f \"{uninstall_shortcut}\"
 del /f \"{tray_shortcut}\"
@@ -934,6 +937,7 @@ sc start {app_name}
         path=path,
         src_exe=std::env::current_exe()?.to_str().unwrap_or(""),
         exe=exe,
+        sciter_name=sciter_name,
         subkey=subkey,
         app_name=APP_NAME,
         version=crate::VERSION,
