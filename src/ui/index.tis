@@ -647,23 +647,9 @@ class PasswordEyeArea : Reactor.Component {
     render() {
         return
             <div .eye-area style="width: *">
-                <input|text @{this.input} readonly value="******" />
+                <input|text @{this.input} readonly value={handler.get_password()} />
                 {svg_eye}
             </div>;
-    }
-    
-    event mouseenter {
-        var me = this;
-        me.leaved = false;
-        me.timer(300ms, function() {
-            if (me.leaved) return;
-            me.input.value = handler.get_password();
-        });
-    }
-
-    event mouseleave {
-        this.leaved = true;
-        this.input.value = "******";
     }
 }
 
