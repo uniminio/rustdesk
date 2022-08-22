@@ -32,7 +32,6 @@ use std::{
     io::ErrorKind::WouldBlock,
     time::{self, Duration, Instant},
 };
-use virtual_display;
 
 pub const NAME: &'static str = "video";
 
@@ -162,12 +161,8 @@ fn run(sp: GenericService) -> ResultType<()> {
     if num_displays == 0 {
         // Device may sometimes be uninstalled by user in "Device Manager" Window.
         // Closing device will clear the instance data.
-        virtual_display::close_device();
     } else if num_displays > 1 {
         // Try close device, if display device changed.
-        if virtual_display::is_device_created() {
-            virtual_display::close_device();
-        }
     }
 
     let fps = 30;
@@ -432,26 +427,9 @@ fn try_get_displays() -> ResultType<Vec<Display>> {
     if displays.len() == 0 {
         log::debug!("no displays, create virtual display");
         // Try plugin monitor
-        if !virtual_display::is_device_created() {
-            if let Err(e) = virtual_display::create_device() {
-                log::debug!("Create device failed {}", e);
-            }
-        }
-        if virtual_display::is_device_created() {
-            if let Err(e) = virtual_display::plug_in_monitor() {
-                log::debug!("Plug in monitor failed {}", e);
-            } else {
-                if let Err(e) = virtual_display::update_monitor_modes() {
-                    log::debug!("Update monitor modes failed {}", e);
-                }
-            }
-        }
         displays = Display::all()?;
     } else if displays.len() > 1 {
         // If more than one displays exists, close RustDeskVirtualDisplay
-        if virtual_display::is_device_created() {
-            virtual_display::close_device()
-        }
     }
     Ok(displays)
 }

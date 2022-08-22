@@ -293,7 +293,6 @@ class MyIdMenu: Reactor.Component {
                 handler.set_socks(proxy, username, password);
             }, 240);
         } else if (me.id == "install-virtual-display") {
-            handler.install_virtual_display();
         } else if (me.id == "stop-service") {
             handler.set_option("stop-service", service_stopped ? "" : "Y");
         } else if (me.id == "about") {
