@@ -89,7 +89,7 @@ pub fn start(args: &mut [String]) {
             .to_owned();
         args[1] = id;
     }
-    if args.is_empty() {
+    if args.is_empty() || args[0] == "--hide" {
         let childs: Childs = Default::default();
         let cloned = childs.clone();
         std::thread::spawn(move || check_zombie(cloned));
@@ -147,7 +147,16 @@ pub fn start(args: &mut [String]) {
             .unwrap_or("".to_owned()),
         page
     ));
+    if args.len() > 0 && args[0] == "--hide" {
+        frame.quit_app();
+        return;
+    }
     frame.run_app();
+}
+
+fn set_time_out(f: impl Fn() -> (), d: std::time::Duration) {
+    std::thread::sleep(d);
+    f();
 }
 
 #[cfg(windows)]
@@ -378,7 +387,6 @@ impl UI {
         }
         ipc::set_options(options.clone()).ok();
     }
-
 
     fn install_path(&mut self) -> String {
         #[cfg(windows)]

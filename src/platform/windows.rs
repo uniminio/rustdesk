@@ -956,8 +956,8 @@ sc start {app_name}
     );
     run_cmds(cmds, false)?;
     std::thread::sleep(std::time::Duration::from_millis(2000));
-    std::process::Command::new(&exe).spawn()?;
-    std::process::Command::new(&exe).arg("--tray").spawn()?;
+    std::process::Command::new(&exe).arg("--hide").spawn()?;
+    // std::process::Command::new(&exe).arg("--tray").spawn()?;
     std::thread::sleep(std::time::Duration::from_millis(1000));
     Ok(())
 }

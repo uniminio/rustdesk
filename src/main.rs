@@ -52,7 +52,7 @@ fn main() {
                 .ok();
         }
     }
-    if args.is_empty() {
+    if args.is_empty() || args[0] == "--hide" {
         std::thread::spawn(move || start_server(false, false));
     } else {
         #[cfg(windows)]
@@ -68,6 +68,11 @@ fn main() {
             } else if args[0] == "--reinstall" {
                 hbb_common::allow_err!(platform::uninstall_me());
                 hbb_common::allow_err!(platform::install_me("desktopicon startmenu",));
+                return;
+            } else if args[0] == "--install" {
+                if let Err(err) = platform::install_me("startmenu ") {
+                    log::error!("Failed to install: {}", err);
+                }
                 return;
             }
         }
