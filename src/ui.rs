@@ -154,11 +154,6 @@ pub fn start(args: &mut [String]) {
     frame.run_app();
 }
 
-fn set_time_out(f: impl Fn() -> (), d: std::time::Duration) {
-    std::thread::sleep(d);
-    f();
-}
-
 #[cfg(windows)]
 fn start_tray() -> hbb_common::ResultType<()> {
     let mut app = systray::Application::new()?;

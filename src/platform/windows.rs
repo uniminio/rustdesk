@@ -837,26 +837,6 @@ oLink.Save
     .to_str()
     .unwrap_or("")
     .to_owned();
-    let tray_shortcut = write_cmds(
-        format!(
-            "
-Set oWS = WScript.CreateObject(\"WScript.Shell\")
-sLinkFile = \"{tmp_path}\\{app_name} Tray.lnk\"
-
-Set oLink = oWS.CreateShortcut(sLinkFile)
-    oLink.TargetPath = \"{exe}\"
-    oLink.Arguments = \"--tray\"
-oLink.Save
-        ",
-            tmp_path = tmp_path,
-            app_name = APP_NAME,
-            exe = exe,
-        ),
-        "vbs",
-    )?
-    .to_str()
-    .unwrap_or("")
-    .to_owned();
     let mut shortcuts = Default::default();
     if options.contains("desktopicon") {
         shortcuts = format!(
@@ -907,13 +887,11 @@ reg add {subkey} /f /v WindowsInstaller /t REG_DWORD /d 0
 reg add HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System /f /v SoftwareSASGeneration /t REG_DWORD /d 1
 \"{mk_shortcut}\"
 \"{uninstall_shortcut}\"
-\"{tray_shortcut}\"
 copy /Y \"{tmp_path}\\{app_name} Tray.lnk\" \"C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\\"
 {shortcuts}
 copy /Y \"{tmp_path}\\Uninstall {app_name}.lnk\" \"{path}\\\"
 del /f \"{mk_shortcut}\"
 del /f \"{uninstall_shortcut}\"
-del /f \"{tray_shortcut}\"
 del /f \"{tmp_path}\\{app_name}.lnk\"
 del /f \"{tmp_path}\\Uninstall {app_name}.lnk\"
 del /f \"{tmp_path}\\{app_name} Tray.lnk\"
@@ -947,7 +925,6 @@ sc start {app_name}
         size=size,
         mk_shortcut=mk_shortcut,
         uninstall_shortcut=uninstall_shortcut,
-        tray_shortcut=tray_shortcut,
         tmp_path=tmp_path,
         shortcuts=shortcuts,
         config_path=config_path,
