@@ -902,6 +902,15 @@ reg add HKEY_CLASSES_ROOT\\.{ext}\\shell /f
 reg add HKEY_CLASSES_ROOT\\.{ext}\\shell\\open /f
 reg add HKEY_CLASSES_ROOT\\.{ext}\\shell\\open\\command /f
 reg add HKEY_CLASSES_ROOT\\.{ext}\\shell\\open\\command /f /ve /t REG_SZ /d \"\\\"{exe}\\\" --play \\\"%%1\\\"\"
+reg add HKEY_CLASSES_ROOT\\{app_name} /f
+reg add HKEY_CLASSES_ROOT\\{app_name} /f /ve /t REG_SZ  /d \"{app_name}\"
+reg add HKEY_CLASSES_ROOT\\{app_name} /f /v \"URL Protocol\" /t REG_SZ  /d \"{exe}\"
+reg add HKEY_CLASSES_ROOT\\{app_name}\\DefaultIcon /f
+reg add HKEY_CLASSES_ROOT\\{app_name}\\DefaultIcon /f /ve /t REG_SZ  /d \"\\\"{exe}\\\",0\"
+reg add HKEY_CLASSES_ROOT\\{app_name}\\shell /f
+reg add HKEY_CLASSES_ROOT\\{app_name}\\shell\\open /f
+reg add HKEY_CLASSES_ROOT\\{app_name}\\shell\\open\\command /f
+reg add HKEY_CLASSES_ROOT\\{app_name}\\shell\\open\\command /f /ve /t REG_SZ /d \"\\\"{exe}\\\" \\\"%%1\\\"\"
 sc create {app_name} binpath= \"\\\"{exe}\\\" --import-config \\\"{config_path}\\\"\" start= auto DisplayName= \"{app_name} Service\"
 sc start {app_name}
 sc stop {app_name}
@@ -950,6 +959,7 @@ sc delete {app_name}
 taskkill /F /IM {app_name}.exe
 reg delete {subkey} /f
 reg delete HKEY_CLASSES_ROOT\\.{ext} /f
+reg delete HKEY_CLASSES_ROOT\\{app_name} /f
 rd /s /q \"{path}\"
 rd /s /q \"{start_menu}\"
 del /f /q \"%PUBLIC%\\Desktop\\{app_name}*\"

@@ -17,6 +17,8 @@ fn main() {
 #[cfg(not(any(target_os = "android", target_os = "ios", feature = "cli")))]
 fn main() {
     // https://docs.rs/flexi_logger/latest/flexi_logger/error_info/index.html#write
+
+    use hbb_common::config::LocalConfig;
     let mut _async_logger_holder: Option<flexi_logger::LoggerHandle> = None;
     let mut args: Vec<String> = std::env::args().skip(1).collect();
     if args.len() > 0 && args[0] == "--version" {
@@ -52,7 +54,11 @@ fn main() {
                 .ok();
         }
     }
-    if args.is_empty() || args[0] == "--hide" {
+    if args.len() > 0 && args[0].starts_with("rustdesk:") {
+        let remote_id: Vec<&str> = args[0].split(':').collect();
+        LocalConfig::set_remote_id(remote_id[1])
+    }
+    if args.is_empty() || args[0] == "--hide" || args[0].starts_with("rustdesk:") {
         std::thread::spawn(move || start_server(false, false));
     } else {
         #[cfg(windows)]

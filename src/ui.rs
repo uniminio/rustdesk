@@ -89,7 +89,7 @@ pub fn start(args: &mut [String]) {
             .to_owned();
         args[1] = id;
     }
-    if args.is_empty() || args[0] == "--hide" {
+    if args.is_empty() || args[0] == "--hide" || args[0].starts_with("rustdesk:") {
         let childs: Childs = Default::default();
         let cloned = childs.clone();
         std::thread::spawn(move || check_zombie(cloned));
